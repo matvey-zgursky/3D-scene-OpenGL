@@ -41,7 +41,7 @@ class Scene:
 
     def initialize(self):
         """Sets the base OpenGL state for future 3D rendering."""
-        glClearColor(0.08, 0.1, 0.16, 1.0)
+        glClearColor(0.0, 0.0, 0.0, 1.0)
         glEnable(GL_DEPTH_TEST)
         self.setup_projection(self.width, self.height)
 
