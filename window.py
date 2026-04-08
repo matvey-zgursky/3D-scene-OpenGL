@@ -2,6 +2,8 @@ import sys
 
 from OpenGL.GLUT import *
 
+from input_handler import KeyboardHandler
+
 
 class Window:
     """Creates the GLUT window and connects it to a scene object."""
@@ -12,6 +14,7 @@ class Window:
         self.height = height
         self.title = title
         self.timer_interval_ms = 16
+        self.keyboard_handler = KeyboardHandler(scene)
 
     def on_timer(self, _value):
         """Updates animated scene state and schedules the next frame."""
@@ -31,6 +34,7 @@ class Window:
 
         glutDisplayFunc(self.scene.display)
         glutReshapeFunc(self.scene.reshape)
+        glutKeyboardFunc(self.keyboard_handler.on_key)
         glutTimerFunc(self.timer_interval_ms, self.on_timer, 0)
 
     def run(self):

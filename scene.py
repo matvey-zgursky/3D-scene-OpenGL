@@ -20,6 +20,7 @@ class Scene:
         self.light_height = 1.8
         self.light_angle = 0.0
         self.light_angle_step = 0.01
+        self.is_light_moving = False
         self.light_position = (0.0, self.light_height, 0.0, 1.0)
         self.update_light_position()
 
@@ -78,8 +79,15 @@ class Scene:
 
     def animate_light(self):
         """Advances the light along the orbit and updates its position."""
-        self.light_angle = (self.light_angle + self.light_angle_step) % (2.0 * math.pi)
-        self.update_light_position()
+        if self.is_light_moving:
+            self.light_angle = (
+                self.light_angle + self.light_angle_step
+            ) % (2.0 * math.pi)
+            self.update_light_position()
+
+    def toggle_light_motion(self):
+        """Toggles the movement state of the light source."""
+        self.is_light_moving = not self.is_light_moving
 
     def setup_light(self):
         """Updates the OpenGL light position in the current camera space."""
