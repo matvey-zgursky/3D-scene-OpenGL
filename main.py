@@ -1,11 +1,11 @@
-from scene import Basic3DScene
-from window import OpenGLWindow
+from scene import Scene
+from window import Window
 
 
 def main():
     """Runs the OpenGL application."""
-    scene = Basic3DScene()
-    window = OpenGLWindow(scene)
+    scene = Scene()
+    window = Window(scene)
     window.run()
 
 

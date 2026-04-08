@@ -2,6 +2,8 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 
+from surface import WaveSurface
+
 
 class Scene:
     """Stores the rendering logic of the base 3D scene."""
@@ -9,6 +11,7 @@ class Scene:
     def __init__(self, width=900, height=700):
         self.width = width
         self.height = height
+        self.surface = WaveSurface()
 
     def setup_projection(self, width, height):
         """Configures a perspective projection for the 3D scene."""
@@ -26,8 +29,8 @@ class Scene:
         glLoadIdentity()
         gluLookAt(
             0.0,
-            3.0,
-            8.0,
+            4.5,
+            10.0,
             0.0,
             0.0,
             0.0,
@@ -43,9 +46,10 @@ class Scene:
         self.setup_projection(self.width, self.height)
 
     def display(self):
-        """Clears the buffers and prepares the frame for future 3D objects."""
+        """Clears the buffers and renders the 3D scene."""
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         self.setup_camera()
+        self.surface.draw()
         glutSwapBuffers()
 
     def reshape(self, width, height):
