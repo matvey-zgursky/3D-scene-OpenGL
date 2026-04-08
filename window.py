@@ -6,7 +6,7 @@ from OpenGL.GLUT import *
 class Window:
     """Creates the GLUT window and connects it to a scene object."""
 
-    def __init__(self, scene, width=900, height=700, title=b"Basic 3D Scene"):
+    def __init__(self, scene, width=1400, height=900, title=b"Basic 3D Scene"):
         self.scene = scene
         self.width = width
         self.height = height
