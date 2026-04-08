@@ -11,6 +11,13 @@ class Window:
         self.width = width
         self.height = height
         self.title = title
+        self.timer_interval_ms = 16
+
+    def on_timer(self, _value):
+        """Updates animated scene state and schedules the next frame."""
+        self.scene.animate_light()
+        glutPostRedisplay()
+        glutTimerFunc(self.timer_interval_ms, self.on_timer, 0)
 
     def initialize(self):
         """Initializes GLUT, creates the window and registers callbacks."""
@@ -24,6 +31,7 @@ class Window:
 
         glutDisplayFunc(self.scene.display)
         glutReshapeFunc(self.scene.reshape)
+        glutTimerFunc(self.timer_interval_ms, self.on_timer, 0)
 
     def run(self):
         """Starts the OpenGL application loop."""

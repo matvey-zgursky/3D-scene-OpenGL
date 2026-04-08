@@ -1,3 +1,5 @@
+import math
+
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
@@ -12,9 +14,14 @@ class Scene:
         self.width = width
         self.height = height
         self.surface = WaveSurface()
-        self.light_position = (2.5, 1.5, 2.0, 1.0)
         self.light_color = (1.0, 0.9, 0.65, 1.0)
         self.light_radius = 0.15
+        self.light_orbit_radius = 3.2
+        self.light_height = 1.8
+        self.light_angle = 0.0
+        self.light_angle_step = 0.01
+        self.light_position = (0.0, self.light_height, 0.0, 1.0)
+        self.update_light_position()
 
     def setup_projection(self, width, height):
         """Configures a perspective projection for the 3D scene."""
@@ -59,6 +66,20 @@ class Scene:
         glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.02)
 
         self.setup_projection(self.width, self.height)
+
+    def update_light_position(self):
+        """Recalculates the light position along a circular orbit."""
+        self.light_position = (
+            self.light_orbit_radius * math.cos(self.light_angle),
+            self.light_height,
+            self.light_orbit_radius * math.sin(self.light_angle),
+            1.0,
+        )
+
+    def animate_light(self):
+        """Advances the light along the orbit and updates its position."""
+        self.light_angle = (self.light_angle + self.light_angle_step) % (2.0 * math.pi)
+        self.update_light_position()
 
     def setup_light(self):
         """Updates the OpenGL light position in the current camera space."""
