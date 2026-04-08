@@ -22,6 +22,25 @@ class WaveSurface:
         """Returns the wave height for the provided coordinates."""
         return self.amplitude * math.sin(x) * math.cos(z)
 
+    def get_normal(self, x, z):
+        """Returns the normal vector for the wave surface at the point."""
+        derivative_x = self.amplitude * math.cos(x) * math.cos(z)
+        derivative_z = -self.amplitude * math.sin(x) * math.sin(z)
+
+        normal_x = -derivative_x
+        normal_y = 1.0
+        normal_z = -derivative_z
+
+        length = math.sqrt(
+            normal_x * normal_x + normal_y * normal_y + normal_z * normal_z
+        )
+
+        return (
+            normal_x / length,
+            normal_y / length,
+            normal_z / length,
+        )
+
     def _frange(self, start, stop, step):
         """Yields floating-point values including the final segment boundary."""
         current = start
@@ -32,7 +51,10 @@ class WaveSurface:
 
     def draw(self):
         """Draws the surface as a grid of quad polygons."""
-        glColor3f(0.3, 0.75, 0.9)
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (0.08, 0.18, 0.22, 1.0))
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (0.3, 0.75, 0.9, 1.0))
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, (0.9, 0.9, 0.95, 1.0))
+        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 48.0)
 
         x_start, x_end = self.x_range
         z_start, z_end = self.z_range
@@ -44,11 +66,15 @@ class WaveSurface:
             for z in self._frange(z_start, z_end, self.step):
                 next_z = min(z + self.step, z_end)
 
+                glNormal3f(*self.get_normal(x, z))
                 glVertex3f(x, self.get_height(x, z), z)
+                glNormal3f(*self.get_normal(next_x, z))
                 glVertex3f(next_x, self.get_height(next_x, z), z)
 
                 if next_z == z_end:
+                    glNormal3f(*self.get_normal(x, next_z))
                     glVertex3f(x, self.get_height(x, next_z), next_z)
+                    glNormal3f(*self.get_normal(next_x, next_z))
                     glVertex3f(next_x, self.get_height(next_x, next_z), next_z)
 
             glEnd()
