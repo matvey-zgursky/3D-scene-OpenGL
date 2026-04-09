@@ -10,6 +10,8 @@ Vector3f: TypeAlias = tuple[float, float, float]
 WaveComponent: TypeAlias = tuple[float, float, float, float]
 MaterialPreset: TypeAlias = tuple[
     tuple[float, float, float, float],
+    tuple[float, float, float, float],
+    tuple[float, float, float, float],
     float,
 ]
 
@@ -19,18 +21,26 @@ class WaveSurface:
 
     MATERIAL_PRESETS: tuple[MaterialPreset, ...] = (
         (
+            (0.08, 0.18, 0.22, 1.0),
+            (0.3, 0.75, 0.9, 1.0),
             (0.9, 0.9, 0.95, 1.0),
             48.0,
         ),
         (
+            (0.08, 0.18, 0.22, 1.0),
+            (0.3, 0.75, 0.9, 1.0),
             (0.95, 0.95, 1.0, 1.0),
             96.0,
         ),
         (
+            (0.08, 0.18, 0.22, 1.0),
+            (0.3, 0.75, 0.9, 1.0),
             (0.35, 0.25, 0.08, 1.0),
             18.0,
         ),
         (
+            (0.08, 0.18, 0.22, 1.0),
+            (0.3, 0.75, 0.9, 1.0),
             (0.75, 0.9, 0.82, 1.0),
             72.0,
         ),
@@ -135,9 +145,11 @@ class WaveSurface:
 
     def draw(self) -> None:
         """Отрисовывает поверхность как сетку из quad strip-полос."""
-        specular, shininess = self.MATERIAL_PRESETS[self.material_index]
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (0.08, 0.18, 0.22, 1.0))
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (0.3, 0.75, 0.9, 1.0))
+        ambient, diffuse, specular, shininess = self.MATERIAL_PRESETS[
+            self.material_index
+        ]
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient)
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse)
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular)
         glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess)
 
