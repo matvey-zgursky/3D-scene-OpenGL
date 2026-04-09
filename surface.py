@@ -8,10 +8,33 @@ from OpenGL.GL import *
 FloatRange: TypeAlias = tuple[float, float]
 Vector3f: TypeAlias = tuple[float, float, float]
 WaveComponent: TypeAlias = tuple[float, float, float, float]
+MaterialPreset: TypeAlias = tuple[
+    tuple[float, float, float, float],
+    float,
+]
 
 
 class WaveSurface:
     """Представляет волнообразную поверхность для отрисовки в 3D-сцене."""
+
+    MATERIAL_PRESETS: tuple[MaterialPreset, ...] = (
+        (
+            (0.9, 0.9, 0.95, 1.0),
+            48.0,
+        ),
+        (
+            (0.95, 0.95, 1.0, 1.0),
+            96.0,
+        ),
+        (
+            (0.35, 0.25, 0.08, 1.0),
+            18.0,
+        ),
+        (
+            (0.75, 0.9, 0.82, 1.0),
+            72.0,
+        ),
+    )
 
     def __init__(
         self,
@@ -26,6 +49,7 @@ class WaveSurface:
         self.components: tuple[WaveComponent, ...] = components or (
             (0.4, 1.0, 1.0, 0.0),
         )
+        self.material_index: int = 0
 
     @classmethod
     def create_random(cls) -> "WaveSurface":
@@ -105,12 +129,17 @@ class WaveSurface:
             yield current
             current += step
 
+    def next_material(self) -> None:
+        """Переключает активный материал поверхности."""
+        self.material_index = (self.material_index + 1) % len(self.MATERIAL_PRESETS)
+
     def draw(self) -> None:
         """Отрисовывает поверхность как сетку из quad strip-полос."""
+        specular, shininess = self.MATERIAL_PRESETS[self.material_index]
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (0.08, 0.18, 0.22, 1.0))
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (0.3, 0.75, 0.9, 1.0))
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, (0.9, 0.9, 0.95, 1.0))
-        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 48.0)
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular)
+        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess)
 
         x_start, x_end = self.x_range
         z_start, z_end = self.z_range

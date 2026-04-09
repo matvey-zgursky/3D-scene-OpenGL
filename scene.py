@@ -12,7 +12,7 @@ Position4f: TypeAlias = tuple[float, float, float, float]
 
 
 class Scene:
-    """Содержит логику отрисовки базовой 3D-сцены."""
+    """содержит логику отрисовки 3D-сцены."""
 
     def __init__(self, width: int = 900, height: int = 700) -> None:
         self.width: int = width
@@ -29,7 +29,7 @@ class Scene:
         self.update_light_position()
 
     def setup_projection(self, width: int, height: int) -> None:
-        """Настраивает перспективную проекцию для 3D-сцены."""
+        """Насстраивает перспективную проекцию для 3D-сцены."""
         safe_height = max(height, 1)
         aspect_ratio = width / safe_height
 
@@ -55,7 +55,7 @@ class Scene:
         )
 
     def initialize(self) -> None:
-        """Задаёт базовое состояние OpenGL для последующей 3D-отрисовки."""
+        """Задает базовое состояние OpenGL для отрисовки последующей 3D-отрисовки."""
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_LIGHTING)
@@ -82,7 +82,7 @@ class Scene:
         )
 
     def animate_light(self) -> None:
-        """Сдвигает источник света вдоль орбиты и обновляет его положение."""
+        """Сдвигает источник света вдоль орбиты и обнвляет его положение"""
         if self.is_light_moving:
             self.light_angle = (
                 self.light_angle + self.light_angle_step
@@ -94,8 +94,12 @@ class Scene:
         self.is_light_moving = not self.is_light_moving
 
     def regenerate_surface(self) -> None:
-        """Создаёт новую случайную поверхность без сброса состояния сцены."""
+        """Создает новую случайную поверхность без сброса состояния сцены."""
         self.surface = WaveSurface.create_random()
+
+    def toggle_surface_material(self) -> None:
+        """Переключает материал поверхности."""
+        self.surface.next_material()
 
     def setup_light(self) -> None:
         """Обновляет положение источника света OpenGL в текущей системе камеры."""

@@ -18,9 +18,9 @@ class KeyboardHandler:
                 continue
 
         return ""
-    
+
     def on_key(self, key: bytes, _x: int, _y: int) -> None:
-        """Обрабатывает клавиши управления движением света и генерацией поверхности."""
+        """Обрабатывает клавиши управления движением света и свойствами поверхности."""
         decoded_key = self._decode_key(key)
 
         if key == b" ":
@@ -28,4 +28,7 @@ class KeyboardHandler:
             glutPostRedisplay()
         elif decoded_key in {"g", "п"}:
             self.scene.regenerate_surface()
+            glutPostRedisplay()
+        elif decoded_key in {"m", "ь"}:
+            self.scene.toggle_surface_material()
             glutPostRedisplay()
