@@ -1,4 +1,5 @@
 import math
+from typing import TypeAlias
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -6,25 +7,28 @@ from OpenGL.GLUT import *
 
 from surface import WaveSurface
 
+Color4f: TypeAlias = tuple[float, float, float, float]
+Position4f: TypeAlias = tuple[float, float, float, float]
+
 
 class Scene:
     """Stores the rendering logic of the base 3D scene."""
 
-    def __init__(self, width=900, height=700):
-        self.width = width
-        self.height = height
-        self.surface = WaveSurface()
-        self.light_color = (1.0, 0.9, 0.65, 1.0)
-        self.light_radius = 0.15
-        self.light_orbit_radius = 3.2
-        self.light_height = 1.8
-        self.light_angle = 0.0
-        self.light_angle_step = 0.01
-        self.is_light_moving = False
-        self.light_position = (0.0, self.light_height, 0.0, 1.0)
+    def __init__(self, width: int = 900, height: int = 700) -> None:
+        self.width: int = width
+        self.height: int = height
+        self.surface: WaveSurface = WaveSurface()
+        self.light_color: Color4f = (1.0, 0.9, 0.65, 1.0)
+        self.light_radius: float = 0.15
+        self.light_orbit_radius: float = 3.2
+        self.light_height: float = 1.8
+        self.light_angle: float = 0.0
+        self.light_angle_step: float = 0.01
+        self.is_light_moving: bool = False
+        self.light_position: Position4f = (0.0, self.light_height, 0.0, 1.0)
         self.update_light_position()
 
-    def setup_projection(self, width, height):
+    def setup_projection(self, width: int, height: int) -> None:
         """Configures a perspective projection for the 3D scene."""
         safe_height = max(height, 1)
         aspect_ratio = width / safe_height
@@ -35,7 +39,7 @@ class Scene:
         gluPerspective(45.0, aspect_ratio, 0.1, 100.0)
         glMatrixMode(GL_MODELVIEW)
 
-    def setup_camera(self):
+    def setup_camera(self) -> None:
         """Places the camera so the scene is viewed in perspective."""
         glLoadIdentity()
         gluLookAt(
@@ -50,7 +54,7 @@ class Scene:
             0.0,
         )
 
-    def initialize(self):
+    def initialize(self) -> None:
         """Sets the base OpenGL state for future 3D rendering."""
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glEnable(GL_DEPTH_TEST)
@@ -68,7 +72,7 @@ class Scene:
 
         self.setup_projection(self.width, self.height)
 
-    def update_light_position(self):
+    def update_light_position(self) -> None:
         """Recalculates the light position along a circular orbit."""
         self.light_position = (
             self.light_orbit_radius * math.cos(self.light_angle),
@@ -77,7 +81,7 @@ class Scene:
             1.0,
         )
 
-    def animate_light(self):
+    def animate_light(self) -> None:
         """Advances the light along the orbit and updates its position."""
         if self.is_light_moving:
             self.light_angle = (
@@ -85,15 +89,15 @@ class Scene:
             ) % (2.0 * math.pi)
             self.update_light_position()
 
-    def toggle_light_motion(self):
+    def toggle_light_motion(self) -> None:
         """Toggles the movement state of the light source."""
         self.is_light_moving = not self.is_light_moving
 
-    def setup_light(self):
+    def setup_light(self) -> None:
         """Updates the OpenGL light position in the current camera space."""
         glLightfv(GL_LIGHT0, GL_POSITION, self.light_position)
 
-    def draw_light_source(self):
+    def draw_light_source(self) -> None:
         """Draws a glowing sphere at the light source position."""
         glPushMatrix()
         glTranslatef(*self.light_position[:3])
@@ -107,7 +111,7 @@ class Scene:
 
         glPopMatrix()
 
-    def display(self):
+    def display(self) -> None:
         """Clears the buffers and renders the 3D scene."""
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         self.setup_camera()
@@ -116,7 +120,7 @@ class Scene:
         self.draw_light_source()
         glutSwapBuffers()
 
-    def reshape(self, width, height):
+    def reshape(self, width: int, height: int) -> None:
         """Updates the projection when the window size changes."""
         self.width = width
         self.height = max(height, 1)

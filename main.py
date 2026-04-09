@@ -2,7 +2,7 @@ from scene import Scene
 from window import Window
 
 
-def main():
+def main() -> None:
     """Runs the OpenGL application."""
     scene = Scene()
     window = Window(scene)

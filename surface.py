@@ -1,6 +1,11 @@
 import math
+from collections.abc import Iterator
+from typing import TypeAlias
 
 from OpenGL.GL import *
+
+FloatRange: TypeAlias = tuple[float, float]
+Vector3f: TypeAlias = tuple[float, float, float]
 
 
 class WaveSurface:
@@ -8,21 +13,21 @@ class WaveSurface:
 
     def __init__(
         self,
-        x_range=(-4.5, 4.5),
-        z_range=(-4.5, 4.5),
-        step=0.25,
-        amplitude=0.4,
-    ):
-        self.x_range = x_range
-        self.z_range = z_range
-        self.step = step
-        self.amplitude = amplitude
+        x_range: FloatRange = (-4.5, 4.5),
+        z_range: FloatRange = (-4.5, 4.5),
+        step: float = 0.25,
+        amplitude: float = 0.4,
+    ) -> None:
+        self.x_range: FloatRange = x_range
+        self.z_range: FloatRange = z_range
+        self.step: float = step
+        self.amplitude: float = amplitude
 
-    def get_height(self, x, z):
+    def get_height(self, x: float, z: float) -> float:
         """Returns the wave height for the provided coordinates."""
         return self.amplitude * math.sin(x) * math.cos(z)
 
-    def get_normal(self, x, z):
+    def get_normal(self, x: float, z: float) -> Vector3f:
         """Returns the normal vector for the wave surface at the point."""
         derivative_x = self.amplitude * math.cos(x) * math.cos(z)
         derivative_z = -self.amplitude * math.sin(x) * math.sin(z)
@@ -41,7 +46,7 @@ class WaveSurface:
             normal_z / length,
         )
 
-    def _frange(self, start, stop, step):
+    def _frange(self, start: float, stop: float, step: float) -> Iterator[float]:
         """Yields floating-point values including the final segment boundary."""
         current = start
 
@@ -49,7 +54,7 @@ class WaveSurface:
             yield current
             current += step
 
-    def draw(self):
+    def draw(self) -> None:
         """Draws the surface as a grid of quad polygons."""
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (0.08, 0.18, 0.22, 1.0))
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (0.3, 0.75, 0.9, 1.0))
