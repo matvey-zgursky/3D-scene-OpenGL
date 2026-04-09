@@ -96,8 +96,10 @@ class Scene:
     def regenerate_surface(self) -> None:
         """Создает новую случайную поверхность без сброса состояния сцены."""
         current_color_index = self.surface.color_index
+        current_material_index = self.surface.material_index
         self.surface = WaveSurface.create_random()
         self.surface.color_index = current_color_index
+        self.surface.material_index = current_material_index
 
     def toggle_surface_material(self) -> None:
         """Переключает материал поверхности."""
