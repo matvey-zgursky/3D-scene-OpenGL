@@ -93,6 +93,10 @@ class Scene:
         """Переключает состояние движения источника света."""
         self.is_light_moving = not self.is_light_moving
 
+    def regenerate_surface(self) -> None:
+        """Создаёт новую случайную поверхность без сброса состояния сцены."""
+        self.surface = WaveSurface.create_random()
+
     def setup_light(self) -> None:
         """Обновляет положение источника света OpenGL в текущей системе камеры."""
         glLightfv(GL_LIGHT0, GL_POSITION, self.light_position)

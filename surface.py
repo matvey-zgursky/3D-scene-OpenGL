@@ -1,4 +1,5 @@
 import math
+import random
 from collections.abc import Iterator
 from typing import TypeAlias
 
@@ -6,6 +7,7 @@ from OpenGL.GL import *
 
 FloatRange: TypeAlias = tuple[float, float]
 Vector3f: TypeAlias = tuple[float, float, float]
+WaveComponent: TypeAlias = tuple[float, float, float, float]
 
 
 class WaveSurface:
@@ -16,21 +18,70 @@ class WaveSurface:
         x_range: FloatRange = (-4.5, 4.5),
         z_range: FloatRange = (-4.5, 4.5),
         step: float = 0.25,
-        amplitude: float = 0.4,
+        components: tuple[WaveComponent, ...] | None = None,
     ) -> None:
         self.x_range: FloatRange = x_range
         self.z_range: FloatRange = z_range
         self.step: float = step
-        self.amplitude: float = amplitude
+        self.components: tuple[WaveComponent, ...] = components or (
+            (0.4, 1.0, 1.0, 0.0),
+        )
+
+    @classmethod
+    def create_random(cls) -> "WaveSurface":
+        """Создаёт поверхность со случайной комбинацией волн."""
+        component_count = random.randint(2, 3)
+        components = tuple(
+            (
+                random.uniform(0.12, 0.28),
+                random.uniform(0.6, 1.8),
+                random.uniform(0.6, 1.8),
+                random.uniform(0.0, 2.0 * math.pi),
+            )
+            for _ in range(component_count)
+        )
+        return cls(components=components)
+
+    def _get_height_derivatives(self, x: float, z: float) -> tuple[float, float]:
+        """Возвращает частные производные высоты по x и z."""
+        derivative_x = 0.0
+        derivative_z = 0.0
+
+        for amplitude, frequency_x, frequency_z, phase in self.components:
+            angle_x = frequency_x * x + phase
+            angle_z = frequency_z * z + phase
+
+            derivative_x += (
+                amplitude
+                * frequency_x
+                * math.cos(angle_x)
+                * math.cos(angle_z)
+            )
+            derivative_z -= (
+                amplitude
+                * frequency_z
+                * math.sin(angle_x)
+                * math.sin(angle_z)
+            )
+
+        return derivative_x, derivative_z
 
     def get_height(self, x: float, z: float) -> float:
         """Возвращает высоту волны для заданных координат."""
-        return self.amplitude * math.sin(x) * math.cos(z)
+        height = 0.0
+
+        for amplitude, frequency_x, frequency_z, phase in self.components:
+            height += (
+                amplitude
+                * math.sin(frequency_x * x + phase)
+                * math.cos(frequency_z * z + phase)
+            )
+
+        return height
 
     def get_normal(self, x: float, z: float) -> Vector3f:
         """Возвращает вектор нормали к поверхности в заданной точке."""
-        derivative_x = self.amplitude * math.cos(x) * math.cos(z)
-        derivative_z = -self.amplitude * math.sin(x) * math.sin(z)
+        derivative_x, derivative_z = self._get_height_derivatives(x, z)
 
         normal_x = -derivative_x
         normal_y = 1.0
