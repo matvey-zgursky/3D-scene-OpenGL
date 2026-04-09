@@ -3,7 +3,7 @@ from window import Window
 
 
 def main() -> None:
-    """Runs the OpenGL application."""
+    """Запускает OpenGL-приложение."""
     scene = Scene()
     window = Window(scene)
     window.run()

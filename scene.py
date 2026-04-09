@@ -12,7 +12,7 @@ Position4f: TypeAlias = tuple[float, float, float, float]
 
 
 class Scene:
-    """Stores the rendering logic of the base 3D scene."""
+    """Содержит логику отрисовки базовой 3D-сцены."""
 
     def __init__(self, width: int = 900, height: int = 700) -> None:
         self.width: int = width
@@ -29,7 +29,7 @@ class Scene:
         self.update_light_position()
 
     def setup_projection(self, width: int, height: int) -> None:
-        """Configures a perspective projection for the 3D scene."""
+        """Настраивает перспективную проекцию для 3D-сцены."""
         safe_height = max(height, 1)
         aspect_ratio = width / safe_height
 
@@ -40,7 +40,7 @@ class Scene:
         glMatrixMode(GL_MODELVIEW)
 
     def setup_camera(self) -> None:
-        """Places the camera so the scene is viewed in perspective."""
+        """Размещает камеру для отображения сцены в перспективе."""
         glLoadIdentity()
         gluLookAt(
             0.0,
@@ -55,7 +55,7 @@ class Scene:
         )
 
     def initialize(self) -> None:
-        """Sets the base OpenGL state for future 3D rendering."""
+        """Задаёт базовое состояние OpenGL для последующей 3D-отрисовки."""
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_LIGHTING)
@@ -73,7 +73,7 @@ class Scene:
         self.setup_projection(self.width, self.height)
 
     def update_light_position(self) -> None:
-        """Recalculates the light position along a circular orbit."""
+        """Пересчитывает положение источника света на круговой орбите."""
         self.light_position = (
             self.light_orbit_radius * math.cos(self.light_angle),
             self.light_height,
@@ -82,7 +82,7 @@ class Scene:
         )
 
     def animate_light(self) -> None:
-        """Advances the light along the orbit and updates its position."""
+        """Сдвигает источник света вдоль орбиты и обновляет его положение."""
         if self.is_light_moving:
             self.light_angle = (
                 self.light_angle + self.light_angle_step
@@ -90,15 +90,15 @@ class Scene:
             self.update_light_position()
 
     def toggle_light_motion(self) -> None:
-        """Toggles the movement state of the light source."""
+        """Переключает состояние движения источника света."""
         self.is_light_moving = not self.is_light_moving
 
     def setup_light(self) -> None:
-        """Updates the OpenGL light position in the current camera space."""
+        """Обновляет положение источника света OpenGL в текущей системе камеры."""
         glLightfv(GL_LIGHT0, GL_POSITION, self.light_position)
 
     def draw_light_source(self) -> None:
-        """Draws a glowing sphere at the light source position."""
+        """Отрисовывает светящуюся сферу в позиции источника света."""
         glPushMatrix()
         glTranslatef(*self.light_position[:3])
 
@@ -112,7 +112,7 @@ class Scene:
         glPopMatrix()
 
     def display(self) -> None:
-        """Clears the buffers and renders the 3D scene."""
+        """Очищает буферы и отрисовывает 3D-сцену."""
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         self.setup_camera()
         self.setup_light()
@@ -121,7 +121,7 @@ class Scene:
         glutSwapBuffers()
 
     def reshape(self, width: int, height: int) -> None:
-        """Updates the projection when the window size changes."""
+        """Обновляет проекцию при изменении размера окна."""
         self.width = width
         self.height = max(height, 1)
         self.setup_projection(width, height)

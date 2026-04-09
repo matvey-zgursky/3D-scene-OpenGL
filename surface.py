@@ -9,7 +9,7 @@ Vector3f: TypeAlias = tuple[float, float, float]
 
 
 class WaveSurface:
-    """Represents a wave-like surface that can be rendered in the 3D scene."""
+    """Представляет волнообразную поверхность для отрисовки в 3D-сцене."""
 
     def __init__(
         self,
@@ -24,11 +24,11 @@ class WaveSurface:
         self.amplitude: float = amplitude
 
     def get_height(self, x: float, z: float) -> float:
-        """Returns the wave height for the provided coordinates."""
+        """Возвращает высоту волны для заданных координат."""
         return self.amplitude * math.sin(x) * math.cos(z)
 
     def get_normal(self, x: float, z: float) -> Vector3f:
-        """Returns the normal vector for the wave surface at the point."""
+        """Возвращает вектор нормали к поверхности в заданной точке."""
         derivative_x = self.amplitude * math.cos(x) * math.cos(z)
         derivative_z = -self.amplitude * math.sin(x) * math.sin(z)
 
@@ -47,7 +47,7 @@ class WaveSurface:
         )
 
     def _frange(self, start: float, stop: float, step: float) -> Iterator[float]:
-        """Yields floating-point values including the final segment boundary."""
+        """Последовательно выдаёт значения с плавающей точкой от start до stop, не включая stop."""
         current = start
 
         while current < stop:
@@ -55,7 +55,7 @@ class WaveSurface:
             current += step
 
     def draw(self) -> None:
-        """Draws the surface as a grid of quad polygons."""
+        """Отрисовывает поверхность как сетку из quad strip-полос."""
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (0.08, 0.18, 0.22, 1.0))
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (0.3, 0.75, 0.9, 1.0))
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, (0.9, 0.9, 0.95, 1.0))

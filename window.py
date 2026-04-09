@@ -7,7 +7,7 @@ from scene import Scene
 
 
 class Window:
-    """Creates the GLUT window and connects it to a scene object."""
+    """Создаёт окно GLUT и связывает его с объектом сцены."""
 
     def __init__(
         self,
@@ -24,13 +24,13 @@ class Window:
         self.keyboard_handler: KeyboardHandler = KeyboardHandler(scene)
 
     def on_timer(self, _value: int) -> None:
-        """Updates animated scene state and schedules the next frame."""
+        """Обновляет состояние анимации сцены и планирует следующий кадр."""
         self.scene.animate_light()
         glutPostRedisplay()
         glutTimerFunc(self.timer_interval_ms, self.on_timer, 0)
 
     def initialize(self) -> None:
-        """Initializes GLUT, creates the window and registers callbacks."""
+        """Инициализирует GLUT, создаёт окно и регистрирует callback-функции."""
         glutInit(sys.argv)
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
         glutInitWindowSize(self.width, self.height)
@@ -45,6 +45,6 @@ class Window:
         glutTimerFunc(self.timer_interval_ms, self.on_timer, 0)
 
     def run(self) -> None:
-        """Starts the OpenGL application loop."""
+        """Запускает основной цикл OpenGL-приложения."""
         self.initialize()
         glutMainLoop()
