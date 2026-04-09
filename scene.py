@@ -95,11 +95,17 @@ class Scene:
 
     def regenerate_surface(self) -> None:
         """Создает новую случайную поверхность без сброса состояния сцены."""
+        current_color_index = self.surface.color_index
         self.surface = WaveSurface.create_random()
+        self.surface.color_index = current_color_index
 
     def toggle_surface_material(self) -> None:
         """Переключает материал поверхности."""
         self.surface.next_material()
+
+    def toggle_surface_color(self) -> None:
+        """Переключает цвет материала поверхности."""
+        self.surface.next_color()
 
     def setup_light(self) -> None:
         """Обновляет положение источника света OpenGL в текущей системе камеры."""

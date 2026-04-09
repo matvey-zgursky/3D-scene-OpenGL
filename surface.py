@@ -14,10 +14,20 @@ MaterialPreset: TypeAlias = tuple[
     tuple[float, float, float, float],
     float,
 ]
+Color4f: TypeAlias = tuple[float, float, float, float]
 
 
 class WaveSurface:
     """Представляет волнообразную поверхность для отрисовки в 3D-сцене."""
+
+    COLOR_PRESETS: tuple[Color4f, ...] = (
+        (0.3, 0.75, 0.9, 1.0),
+        (0.92, 0.47, 0.36, 1.0),
+        (0.95, 0.78, 0.3, 1.0),
+        (0.4, 0.8, 0.48, 1.0),
+        (0.62, 0.52, 0.92, 1.0),
+        (0.88, 0.38, 0.72, 1.0),
+    )
 
     MATERIAL_PRESETS: tuple[MaterialPreset, ...] = (
         (
@@ -60,6 +70,7 @@ class WaveSurface:
             (0.4, 1.0, 1.0, 0.0),
         )
         self.material_index: int = 0
+        self.color_index: int = 0
 
     @classmethod
     def create_random(cls) -> "WaveSurface":
@@ -143,13 +154,18 @@ class WaveSurface:
         """Переключает активный материал поверхности."""
         self.material_index = (self.material_index + 1) % len(self.MATERIAL_PRESETS)
 
+    def next_color(self) -> None:
+        """Переключает активный цвет материала поверхности."""
+        self.color_index = (self.color_index + 1) % len(self.COLOR_PRESETS)
+
     def draw(self) -> None:
         """Отрисовывает поверхность как сетку из quad strip-полос."""
-        ambient, diffuse, specular, shininess = self.MATERIAL_PRESETS[
+        _ambient, _diffuse, specular, shininess = self.MATERIAL_PRESETS[
             self.material_index
         ]
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient)
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse)
+        color = self.COLOR_PRESETS[self.color_index]
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, color)
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, color)
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular)
         glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess)
 

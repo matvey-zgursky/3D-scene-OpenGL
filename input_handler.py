@@ -29,6 +29,9 @@ class KeyboardHandler:
         elif decoded_key in {"g", "п"}:
             self.scene.regenerate_surface()
             glutPostRedisplay()
+        elif decoded_key in {"c", "с"}:
+            self.scene.toggle_surface_color()
+            glutPostRedisplay()
         elif decoded_key in {"m", "ь"}:
             self.scene.toggle_surface_material()
             glutPostRedisplay()
