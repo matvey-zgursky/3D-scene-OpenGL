@@ -10,8 +10,6 @@ Vector3f: TypeAlias = tuple[float, float, float]
 WaveComponent: TypeAlias = tuple[float, float, float, float]
 MaterialPreset: TypeAlias = tuple[
     tuple[float, float, float, float],
-    tuple[float, float, float, float],
-    tuple[float, float, float, float],
     float,
 ]
 Color4f: TypeAlias = tuple[float, float, float, float]
