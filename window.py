@@ -14,7 +14,7 @@ class Window:
         scene: Scene,
         width: int = 1400,
         height: int = 900,
-        title: str = "Basic 3D Scene",
+        title: str = "3D Scene",
     ) -> None:
         self.scene: Scene = scene
         self.width: int = width
@@ -34,7 +34,7 @@ class Window:
         glutInit(sys.argv)
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
         glutInitWindowSize(self.width, self.height)
-        glutInitWindowPosition(100, 100)
+        glutInitWindowPosition(300, 50)
         glutCreateWindow(self.title.encode("utf-8"))
 
         self.scene.initialize()
