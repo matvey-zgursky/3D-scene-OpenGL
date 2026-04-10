@@ -31,26 +31,18 @@ class WaveSurface:
 
     MATERIAL_PRESETS: tuple[MaterialPreset, ...] = (
         (
-            (0.08, 0.18, 0.22, 1.0),
-            (0.3, 0.75, 0.9, 1.0),
             (0.5, 0.5, 0.58, 1.0),
             18.0,
         ),
         (
-            (0.08, 0.18, 0.22, 1.0),
-            (0.3, 0.75, 0.9, 1.0),
             (0.76, 0.76, 0.84, 1.0),
             36.0,
         ),
         (
-            (0.08, 0.18, 0.22, 1.0),
-            (0.3, 0.75, 0.9, 1.0),
             (0.01, 0.008, 0.002, 1.0),
             0.0,
         ),
         (
-            (0.08, 0.18, 0.22, 1.0),
-            (0.3, 0.75, 0.9, 1.0),
             (0.98, 1.0, 0.99, 1.0),
             128.0,
         ),
@@ -160,7 +152,7 @@ class WaveSurface:
 
     def draw(self) -> None:
         """Отрисовывает поверхность как сетку из quad strip-полос."""
-        _ambient, _diffuse, specular, shininess = self.MATERIAL_PRESETS[
+        specular, shininess = self.MATERIAL_PRESETS[
             self.material_index
         ]
         color = self.COLOR_PRESETS[self.color_index]
